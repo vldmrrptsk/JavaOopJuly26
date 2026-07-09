@@ -13,7 +13,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите число для проверки попадания в диапазон: ");
         double number = scanner.nextDouble();
-
         System.out.println("Число " + number + " в диапазоне? " + range.isInside(number));
     }
 }
