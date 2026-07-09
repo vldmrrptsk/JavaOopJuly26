@@ -26,7 +26,7 @@ public class Range {
     }
 
     public double getRange() {
-        return Math.abs(from - to);
+        return Math.abs(this.from - this.to);
     }
 
     public boolean isInside(double number) {
