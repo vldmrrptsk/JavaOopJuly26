@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Range range = new Range(-2.1, 10);
 
-        System.out.println("Длина диапазона: " + range.getRange());
+        System.out.println("Длина диапазона: " + range.getInterval());
 
         Scanner scanner = new Scanner(System.in);
 
