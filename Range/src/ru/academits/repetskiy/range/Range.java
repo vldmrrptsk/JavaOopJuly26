@@ -25,7 +25,7 @@ public class Range {
         this.to = to;
     }
 
-    public double getRange() {
+    public double getInterval() {
         return Math.abs(from - to);
     }
 
