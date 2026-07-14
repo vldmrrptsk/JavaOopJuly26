@@ -94,7 +94,7 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double halfPerimeter = getPerimeter();
+        double halfPerimeter = getPerimeter() / 2;
         double area = 1;
 
         for (double side : getSides()) {

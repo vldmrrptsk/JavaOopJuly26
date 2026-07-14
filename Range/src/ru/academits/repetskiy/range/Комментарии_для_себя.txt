@@ -1,0 +1,15 @@
+/* Изначально я хотел реализовать метод, который будет принимать два интервала,
+       но не учел, что при создании объекта, мне нужно работать с объектом.
+       А данный подход можно сделать только через static.
+      Поэтому я хочу оставить и этот способ в классе будет два разных метода.
+     */
+    public static String getIntersection(Range firstRange, Range secondRange) {
+        if (firstRange.from > secondRange.to || firstRange.to < secondRange.from) {
+            return null;
+        }
+
+        double leftBoarderInterval = Math.max(firstRange.from, secondRange.from);
+        double rightBoarderInterval = Math.min(firstRange.to, secondRange.to);
+
+        return leftBoarderInterval + " " + rightBoarderInterval;
+    }

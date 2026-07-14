@@ -23,6 +23,7 @@ public class Square implements Shape {
         return getWidth();
     }
 
+    @Override
     public double getArea() {
         return Math.pow(width, 2);
     }
@@ -34,9 +35,7 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return "Square{" +
-                "width=" + width +
-                '}';
+        return "Square{" + "width=" + width + '}';
     }
 
     @Override
