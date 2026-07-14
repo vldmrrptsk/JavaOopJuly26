@@ -18,7 +18,6 @@ public class Range {
     }
 
     public double getTo() {
-
         return to;
     }
 
