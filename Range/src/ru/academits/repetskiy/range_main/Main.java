@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         Range range1 = new Range(-2.1, 10);
 
-        System.out.println("Длина первого диапазона: " + range1.getInterval());
+        System.out.println("Длина первого диапазона: " + range1.getLength());
 
         Scanner scanner = new Scanner(System.in);
 
@@ -26,13 +26,13 @@ public class Main {
         Range[] ranges = new Range[]{range1, range2, range3, range4};
 
         for (int i = 0; i < ranges.length - 1; i++) {
-            String intersection = Arrays.toString(ranges[i].getIntersection(ranges[i + 1]));
+            Range intersection = ranges[i].getIntersection(ranges[i + 1]);
             String union = Arrays.toString(ranges[i].getUnion(ranges[i + 1]));
-            String difference = Arrays.toString(ranges[i].getAsymmetricDifference(ranges[i + 1]));
+            String difference = Arrays.toString(ranges[i].getDifference(ranges[i + 1]));
 
-            System.out.printf("Интервал-пересечения %d и %d интервалов: %s%n", i + 1, i + 2, intersection);
-            System.out.printf("Интервал-объединения %d и %d интервалов: %s%n", i + 1, i + 2, union);
-            System.out.printf("Интервал-разности %d и %d интервалов: %s%n", i + 1, i + 2, difference);
+            System.out.printf("Результат пересечения %d и %d интервалов: %s%n", i + 1, i + 2, intersection);
+            System.out.printf("Результат объединения %d и %d интервалов: %s%n", i + 1, i + 2, union);
+            System.out.printf("Результат разности %d и %d интервалов: %s%n", i + 1, i + 2, difference);
             System.out.println();
         }
     }

@@ -25,54 +25,67 @@ public class Range {
         this.to = to;
     }
 
-    public double getInterval() {
-        return Math.abs(from - to);
+    public double getLength() {
+        return from - to;
     }
 
     public boolean isInside(double number) {
         return number >= from && number <= to;
     }
 
-    public boolean compareRangeBoundaries(Range range) {
+    private boolean isIntersectionRanges(Range range) {
         return this.from > range.to || this.to < range.from;
     }
 
-    public String[] getIntersection(Range range) {
-        if (compareRangeBoundaries(range)) {
+    public Range getIntersection(Range range) {
+        if (isIntersectionRanges(range)) {
             return null;
         }
 
-        double leftBoarderInterval = Math.max(this.from, range.from);
-        double rightBoarderInterval = Math.min(this.to, range.to);
+        double rangeFrom = Math.max(this.from, range.from);
+        double rangeTo = Math.min(this.to, range.to);
 
-        return new String[]{leftBoarderInterval + "," + rightBoarderInterval};
+        return new Range(rangeFrom, rangeTo);
     }
 
-    public String[] getUnion(Range range) {
-        if (compareRangeBoundaries(range)) {
-            return new String[]{this.from + "," + this.to, range.from + "," + range.to};
+    public Range[] getUnion(Range range) {
+        if (isIntersectionRanges(range)) {
+            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
         }
 
-        double leftBoarderInterval = Math.min(this.from, range.from);
-        double rightBoarderInterval = Math.max(this.to, range.to);
+        double rangeFrom = Math.min(this.from, range.from);
+        double rangeTo = Math.max(this.to, range.to);
 
-        return new String[]{leftBoarderInterval + "," + rightBoarderInterval};
+        return new Range[]{new Range(rangeFrom, rangeTo)};
     }
 
-    public String[] getAsymmetricDifference(Range range) {
-        if (compareRangeBoundaries(range)) {
+    public Range[] getDifference(Range range) {
+        if (isIntersectionRanges(range)) {
             return null;
-        } else if (this.from < range.from) {
+        }
+
+        if (this.from < range.from) {
             if (this.to < range.to) {
-                return new String[]{this.from + " " + range.from};
+                return new Range[]{new Range(this.from, range.from)};
             }
 
-            return new String[]{this.from + "," + range.from, range.to + "," + this.to};
-        } else if (this.from > range.from) {
+            return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
+        }
+
+        if (this.from > range.from) {
             if (this.to > range.to) {
-                return new String[]{range.from + " " + this.from};
+                return new Range[]{new Range(range.from, this.from)};
             }
         }
-        return new String[]{range.from + "," + this.from, this.to + "," + range.to};
+
+        return new Range[]{new Range(range.from, this.from), new Range(this.to, range.to)};
+    }
+
+    @Override
+    public String toString() {
+        return "Интервал: [" +
+                from + ", "
+                + to +
+                "]";
     }
 }
