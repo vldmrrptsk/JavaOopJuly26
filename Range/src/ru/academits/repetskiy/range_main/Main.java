@@ -23,16 +23,16 @@ public class Main {
         Range range3 = new Range(100, 101);
         Range range4 = new Range(-10, -2.1);
 
-        Range[] ranges = new Range[]{range1, range2, range3, range4};
+        Range[] ranges = {range1, range2, range3, range4};
 
         for (int i = 0; i < ranges.length - 1; i++) {
             Range intersection = ranges[i].getIntersection(ranges[i + 1]);
-            String union = Arrays.toString(ranges[i].getUnion(ranges[i + 1]));
-            String difference = Arrays.toString(ranges[i].getDifference(ranges[i + 1]));
+            Range [] union = ranges[i].getUnion(ranges[i + 1]);
+            Range [] difference = ranges[i].getDifference(ranges[i + 1]);
 
             System.out.printf("Результат пересечения %d и %d интервалов: %s%n", i + 1, i + 2, intersection);
-            System.out.printf("Результат объединения %d и %d интервалов: %s%n", i + 1, i + 2, union);
-            System.out.printf("Результат разности %d и %d интервалов: %s%n", i + 1, i + 2, difference);
+            System.out.printf("Результат объединения %d и %d интервалов: %s%n", i + 1, i + 2, Arrays.toString(union));
+            System.out.printf("Результат разности %d и %d интервалов: %s%n", i + 1, i + 2, Arrays.toString(difference));
             System.out.println();
         }
     }
