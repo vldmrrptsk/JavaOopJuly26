@@ -33,55 +33,52 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    private boolean hasIntersection(Range range) {
-        return from > range.to || to < range.from;
+    private boolean isDisjointWith(Range range) {
+        return from >= range.to || to <= range.from;
+    }
+
+    private boolean isBoardersEqual(Range range){
+        final double EPSILON = 1e-10;
+        return Math.abs(from - range.from) < EPSILON && Math.abs(to - range.to) < EPSILON;
     }
 
     public Range getIntersection(Range range) {
-        if (hasIntersection(range)) {
+        if (isDisjointWith(range)) {
             return null;
         }
 
         double rangeFrom = Math.max(from, range.from);
         double rangeTo = Math.min(to, range.to);
 
-        if (rangeFrom == rangeTo) {
-            return null;
-        }
-
         return new Range(rangeFrom, rangeTo);
     }
 
     public Range[] getUnion(Range range) {
-        if (hasIntersection(range)) {
+        if (isDisjointWith(range)) {
             return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
 
-        double rangeFrom = Math.min(this.from, range.from);
-        double rangeTo = Math.max(this.to, range.to);
+        double rangeFrom = Math.min(from, range.from);
+        double rangeTo = Math.max(to, range.to);
 
         return new Range[]{new Range(rangeFrom, rangeTo)};
     }
 
     public Range[] getDifference(Range range) {
-        if (hasIntersection(range)) {
-            return null;
-        }
-
-        if(from == range.to || range.from == to){
-            return null;
+        if (isDisjointWith(range) || isBoardersEqual(range)) {
+            return new Range[]{};
         }
 
         if (from < range.from) {
-            if (to < range.to) {
+            if (to <= range.to) {
                 return new Range[]{new Range(from, range.from)};
             }
 
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        if (from > range.from && to > range.to ) {
-            return new Range[]{new Range(range.from, from)};
+        if (from >= range.from && to > range.to) {
+            return new Range[]{new Range(range.to, to)};
         }
 
         return new Range[]{new Range(range.from, from), new Range(to, range.to)};
@@ -89,9 +86,9 @@ public class Range {
 
     @Override
     public String toString() {
-        return "Интервал: [" +
+        return "Интервал: (" +
                 from + ", "
                 + to +
-                "]";
+                ")";
     }
 }

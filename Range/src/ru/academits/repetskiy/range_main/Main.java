@@ -22,8 +22,13 @@ public class Main {
         Range range2 = new Range(5, 20);
         Range range3 = new Range(100, 101);
         Range range4 = new Range(-10, -2.1);
+        Range range5 = new Range(-10, -2.1);
+        Range range6 = new Range(-2.1, 0);
+        Range range7 = new Range(1, 5);
+        Range range8 = new Range(1, 3);
+        Range range9 = new Range(2, 3);
 
-        Range[] ranges = {range1, range2, range3, range4};
+        Range[] ranges = {range1, range2, range3, range4, range5, range6, range7, range8, range9};
 
         for (int i = 0; i < ranges.length - 1; i++) {
             Range intersection = ranges[i].getIntersection(ranges[i + 1]);
