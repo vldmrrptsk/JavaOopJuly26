@@ -33,39 +33,36 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    private boolean isDisjointWith(Range range) {
-        return from >= range.to || to <= range.from;
-    }
-
-    private boolean isBoardersEqual(Range range){
-        final double EPSILON = 1e-10;
-        return Math.abs(from - range.from) < EPSILON && Math.abs(to - range.to) < EPSILON;
+    private boolean isRangesIntersect(Range range) {
+        return from <= range.to || to >= range.from;
     }
 
     public Range getIntersection(Range range) {
-        if (isDisjointWith(range)) {
+        if (!isRangesIntersect(range)) {
             return null;
         }
 
-        double rangeFrom = Math.max(from, range.from);
-        double rangeTo = Math.min(to, range.to);
-
-        return new Range(rangeFrom, rangeTo);
+        return new Range(Math.max(from, range.from), Math.min(to, range.to));
     }
 
     public Range[] getUnion(Range range) {
-        if (isDisjointWith(range)) {
+        if (isRangesIntersect(range)) {
             return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
 
-        double rangeFrom = Math.min(from, range.from);
-        double rangeTo = Math.max(to, range.to);
-
-        return new Range[]{new Range(rangeFrom, rangeTo)};
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
     public Range[] getDifference(Range range) {
-        if (isDisjointWith(range) || isBoardersEqual(range)) {
+        if (to < range.from || from > range.to) {
+            return new Range[]{new Range(from, to)};
+        }
+
+        if (from == range.from && to == range.to) {
+            return new Range[]{};
+        }
+
+        if (from >= range.from && to <= range.to) {
             return new Range[]{};
         }
 
@@ -77,11 +74,11 @@ public class Range {
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        if (from >= range.from && to > range.to) {
+        if (from >= range.from) {
             return new Range[]{new Range(range.to, to)};
         }
 
-        return new Range[]{new Range(range.from, from), new Range(to, range.to)};
+        return new Range[]{};
     }
 
     @Override

@@ -32,8 +32,8 @@ public class Main {
 
         for (int i = 0; i < ranges.length - 1; i++) {
             Range intersection = ranges[i].getIntersection(ranges[i + 1]);
-            Range [] union = ranges[i].getUnion(ranges[i + 1]);
-            Range [] difference = ranges[i].getDifference(ranges[i + 1]);
+            Range[] union = ranges[i].getUnion(ranges[i + 1]);
+            Range[] difference = ranges[i].getDifference(ranges[i + 1]);
 
             System.out.printf("Результат пересечения %d и %d интервалов: %s%n", i + 1, i + 2, intersection);
             System.out.printf("Результат объединения %d и %d интервалов: %s%n", i + 1, i + 2, Arrays.toString(union));
