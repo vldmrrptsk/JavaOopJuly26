@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Main {
-    public static void main(String[] args) {
-        Shape[] figures = new Shape[]{new Square(10),
+    @SuppressWarnings({"rawtypes", "unchecked"})
+   public static void main(String[] args) {
+        Shape[] shapes = {
+                new Square(10),
                 new Square(10),
                 new Rectangle(10, 3),
                 new Rectangle(1, 20),
@@ -16,14 +18,24 @@ public class Main {
                 new Triangle(0, 1, 3, 7, 2, 10),
                 new Triangle(0, 100, 3, 7, 2, 20)};
 
-        Arrays.sort(figures, Comparator.comparingDouble(Shape::getArea));
-        Shape maxArea = figures[figures.length - 1];
+       Comparator areaComparator = (s1, s2) -> {
+           Shape shape1 = (Shape) s1;
+           Shape shape2 = (Shape) s2;
+           return Double.compare(shape1.getArea(), shape2.getArea());
+       };
 
-        System.out.printf("Фигура с наибольшей площадью: %s = %.2f\n", maxArea.toString(), maxArea.getArea());
+       Arrays.sort(shapes, areaComparator);
 
-        Arrays.sort(figures, Comparator.comparingDouble(Shape::getPerimeter));
-        Shape secondMaxPerimeter = figures[figures.length - 2];
+       System.out.println("Фигура с максимальной площадью: " + shapes[0]);
 
-        System.out.printf("Фигура со вторым по величине периметром: %s = %.2f\n", secondMaxPerimeter.toString(), secondMaxPerimeter.getPerimeter());
-    }
+       Comparator perimeterComparator = (s1, s2) -> {
+           Shape shape1 = (Shape) s1;
+           Shape shape2 = (Shape) s2;
+           return Double.compare(shape1.getPerimeter(), shape2.getPerimeter());
+       };
+
+       Arrays.sort(shapes, perimeterComparator);
+
+       System.out.println("Фигура со вторым по величине периметром: " + shapes[1]);
+   }
 }

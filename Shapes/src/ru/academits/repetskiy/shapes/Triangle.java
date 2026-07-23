@@ -21,19 +21,6 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
-    private double getSideLength(double coordinate1, double coordinate2,
-                                 double coordinate3, double coordinate4) {
-        return Math.sqrt(Math.pow(coordinate1 - coordinate2, 2) + Math.pow(coordinate3 - coordinate4, 2));
-    }
-
-    private double[] getSides() {
-        double a = getSideLength(x3, x2, y3, y2);
-        double b = getSideLength(x3, x1, y3, y1);
-        double c = getSideLength(x2, x1, y2, y1);
-
-        return new double[]{a, b, c};
-    }
-
     public double getX1() {
         return x1;
     }
@@ -82,6 +69,19 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
+
+    private static double getSideLength(double x1, double x2, double y1, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    private double[] getSides() {
+        double a = getSideLength(x2, x3, y2, y3);
+        double b = getSideLength(x1, x3, y1, y3);
+        double c = getSideLength(x1, x2, y1, y2);
+
+        return new double[]{a, b, c};
+    }
+
     @Override
     public double getWidth() {
         return Math.max(Math.max(x1, x2), x3) - Math.min(Math.min(x1, x2), x3);
@@ -95,12 +95,14 @@ public class Triangle implements Shape {
     @Override
     public double getArea() {
         double halfPerimeter = getPerimeter() / 2;
-        double area = 1;
+        double halfPerimeterMinusSideProduct = 1;
+        double[] sides = getSides();
 
-        for (double side : getSides()) {
-            area *= (halfPerimeter - side);
+        for (double side : sides) {
+            halfPerimeterMinusSideProduct *= halfPerimeter - side;
         }
-        return Math.sqrt(halfPerimeter * area);
+
+        return Math.sqrt(halfPerimeter * halfPerimeterMinusSideProduct);
     }
 
     @Override
@@ -110,26 +112,32 @@ public class Triangle implements Shape {
         for (double side : getSides()) {
             perimeter += side;
         }
+
         return perimeter;
     }
 
     @Override
     public String toString() {
-        return "Triangle{" +
-                "x1=" + x1 +
-                ", y1=" + y1 +
-                ", x2=" + x2 +
-                ", y2=" + y2 +
-                ", x3=" + x3 +
-                ", y3=" + y3 +
-                '}';
+        return String.format("Triangle: {x1 = %.2f, y1 = %.2f, " +
+                        "x2 = %.2f, y2 = %.2f," +
+                        "x3 = %.2f, y3 = %.2f}",
+                x1, y1, x2, y2, x3, y3);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         Triangle triangle = (Triangle) o;
-        return Double.compare(x1, triangle.x1) == 0 && Double.compare(y1, triangle.y1) == 0 && Double.compare(x2, triangle.x2) == 0 && Double.compare(y2, triangle.y2) == 0 && Double.compare(x3, triangle.x3) == 0 && Double.compare(y3, triangle.y3) == 0;
+        return x1 == triangle.x1 && y1 == triangle.y1
+                && x2 == triangle.x2 && y2 == triangle.y2
+                && x3 == triangle.x3 && y3 == triangle.y3;
     }
 
     @Override

@@ -9,27 +9,28 @@ public class Circle implements Shape {
         this.radius = radius;
     }
 
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
     public double getRadius() {
         return radius;
     }
 
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+
     @Override
     public double getWidth() {
-        return 2 * getRadius();
+        return 2 * radius;
     }
 
     @Override
     public double getHeight() {
-        return getWidth();
+        return 2 * radius;
     }
 
     @Override
     public double getArea() {
-        return Math.PI * Math.pow(radius, 2);
+        return Math.PI * radius * radius;
     }
 
     @Override
@@ -39,20 +40,25 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Circle{" +
-                "radius=" + radius +
-                '}';
+        return String.format("Circle{radius .2%f}", radius);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         Circle circle = (Circle) o;
-        return Double.compare(radius, circle.radius) == 0;
+        return radius == circle.radius;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(radius);
+        return Double.hashCode(radius);
     }
 }

@@ -1,11 +1,11 @@
 package ru.academits.repetskiy.shapes;
 
 public interface Shape {
-    public abstract double getWidth();
+    double getWidth();
 
-    public abstract double getHeight();
+    double getHeight();
 
-    public abstract double getArea();
+    double getArea();
 
-    public abstract double getPerimeter();
+    double getPerimeter();
 }

@@ -1,52 +1,57 @@
 package ru.academits.repetskiy.shapes;
 
-import java.util.Objects;
-
 public class Square implements Shape {
-    private double width;
+    private double side;
 
-    public Square(double width) {
-        this.width = width;
-    }
-
-    public void setLength(double width) {
-        this.width = width;
+    public Square(double side) {
+        this.side = side;
     }
 
     @Override
     public double getWidth() {
-        return width;
+        return side;
+    }
+
+    public void setWidth(double side) {
+        this.side = side;
     }
 
     @Override
     public double getHeight() {
-        return getWidth();
+        return side;
     }
 
     @Override
     public double getArea() {
-        return Math.pow(width, 2);
+        return side * side;
     }
 
     @Override
     public double getPerimeter() {
-        return 4 * width;
+        return 4 * side;
     }
 
     @Override
     public String toString() {
-        return "Square{" + "width=" + width + '}';
+        return String.format("Square{side=%.2f}", side);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         Square square = (Square) o;
-        return Double.compare(width, square.width) == 0;
+        return side == square.side;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(width);
+        return Double.hashCode(side);
     }
 }

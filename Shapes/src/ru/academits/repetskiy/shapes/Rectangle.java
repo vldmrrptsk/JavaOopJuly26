@@ -11,22 +11,22 @@ public class Rectangle implements Shape {
         this.height = height;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
     @Override
     public double getWidth() {
         return width;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
     @Override
     public double getHeight() {
         return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     @Override
@@ -41,14 +41,19 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "Rectangle{" + "width=" + width + ", height=" + height + '}';
+        return String.format("Rectangle{width=%.2f, height=%.2f}", width, height);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {return false;}
+
         Rectangle rectangle = (Rectangle) o;
-        return Double.compare(width, rectangle.width) == 0 && Double.compare(height, rectangle.height) == 0;
+        return width == rectangle.width && height == rectangle.height;
     }
 
     @Override
