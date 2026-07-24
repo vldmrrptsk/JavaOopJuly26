@@ -4,180 +4,144 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Vector {
-    private int n;
-    private double[] vector;
+    private int vectorLength;
+    private double[] coordinates;
 
-    public Vector(int n) {
-        if (n <= 0) {
-            throw new IllegalArgumentException("Длина вектора должна быть больше 0: " + n);
+    public Vector(int vectorLength) {
+        if (vectorLength <= 0) {
+            throw new IllegalArgumentException("Размер вектора должен быть больше 0: " + vectorLength);
         }
-        this.n = n;
-        this.vector = new double[n];
+        this.vectorLength = vectorLength;
+        coordinates = new double[vectorLength];
     }
 
-    public Vector(Vector other) {
-        this.n = other.getSize();
-        this.vector = new double[other.getSize()];
+    public Vector(Vector vector) {
+        vectorLength = vector.getSize();
+        coordinates = new double[vector.getSize()];
 
-        for (int i = 0; i < other.getSize(); i++) {
-            this.vector[i] = other.vector[i];
-        }
+        System.arraycopy(vector.coordinates, 0, coordinates, 0, vector.getSize());
     }
 
     public Vector(double[] array) {
         if (array.length == 0) {
-            throw new IllegalArgumentException("Длина вектора должна быть больше 0: " + n);
+            throw new IllegalArgumentException("Размер вектора должен быть больше 0: " + array.length);
         }
 
-        this.n = array.length;
-        this.vector = new double[this.n];
+        vectorLength = array.length;
+        coordinates = new double[array.length];
 
-        for (int i = 0; i < array.length; i++) {
-            this.vector[i] = array[i];
-        }
+        System.arraycopy(array, 0, coordinates, 0, array.length);
     }
 
     public Vector(int n, double[] array) {
         if (n <= 0) {
-            throw new IllegalArgumentException("Длина вектора должна быть больше 0: " + n);
+            throw new IllegalArgumentException("Размер вектора должен быть больше 0: " + n);
         }
-        this.n = n;
-        this.vector = new double[Math.max(n, array.length)];
+        vectorLength = n;
+        coordinates = new double[Math.max(n, array.length)];
 
-        for (int i = 0; i < array.length; i++) {
-            this.vector[i] = array[i];
-        }
+        System.arraycopy(array, 0, coordinates, 0, array.length);
     }
 
     public int getSize() {
-        return this.n;
-    }
-
-    public void setSize(int n) {
-        this.n = n;
-    }
-
-    public double[] getVector() {
-        return vector;
-    }
-
-    public void setVector(double[] vector) {
-        this.vector = vector;
-    }
-
-    public double[] getVectorElements() {
-        return this.vector;
+        return this.vectorLength;
     }
 
     @Override
     public String toString() {
-        return "Vector: " +
-                '{' + Arrays.toString(vector) + '}';
+
+        return String.format("Vector: %s", Arrays.toString(coordinates));
     }
 
-    private void extendVector(Vector other) {
-        int newLength = Math.max(this.getSize(), other.getSize());
-        double[] extendsVector = new double[newLength];
+    public void add(Vector vector) {
+        int maxVectorLength = Math.max(this.getVectorLength(), vector.getVectorLength());
 
-        for (int i = 0; i < this.getSize(); i++) {
-            extendsVector[i] = this.vector[i];
-        }
-        this.n = newLength;
-        this.vector = extendsVector;
+        this.coordinates = Arrays.copyOf(this.coordinates, maxVectorLength);
+        vector.coordinates = Arrays.copyOf(vector.coordinates, maxVectorLength);
 
-    }
 
-    public void addVector(Vector other) {
-        if (this.getSize() < other.getSize()) {
-            extendVector(other);
-        }
-
-        for (int i = 0; i < other.getSize(); i++) {
-            this.vector[i] += other.vector[i];
+        for (int i = 0; i < vector.getVectorLength(); i++) {
+            this.coordinates[i] += vector.coordinates[i];
         }
     }
 
-    public void subtractVector(Vector other) {
-        if (this.getSize() < other.getSize()) {
-            extendVector(other);
+    public void subtract(Vector vector) {
+        int maxVectorLength = Math.max(this.getVectorLength(), vector.getVectorLength());
+
+        this.coordinates = Arrays.copyOf(this.coordinates, maxVectorLength);
+        vector.coordinates = Arrays.copyOf(vector.coordinates, maxVectorLength);
+
+
+        for (int i = 0; i < vector.getVectorLength(); i++) {
+            this.coordinates[i] -= vector.coordinates[i];
         }
 
-        for (int i = 0; i < other.getSize(); i++) {
-            this.vector[i] -= other.vector[i];
-        }
     }
 
-    public void multiplyVectorScalar(int scalar) {
-        for (int i = 0; i < this.n; i++) {
-            this.vector[i] *= scalar;
+    public void multiplyVectorByScalar(double scalar) {
+        for (int i = 0; i < this.vectorLength; i++) {
+            this.coordinates[i] *= scalar;
         }
     }
 
     public void turnOverVector() {
-        for (int i = 0; i < this.n; i++) {
-            this.vector[i] *= -1;
-        }
+        multiplyVectorByScalar(-1);
     }
 
     public int getVectorLength() {
-        return this.vector.length;
+        return coordinates.length;
     }
 
-    public void setElementIndex(int index, int element) {
+    public double getElement(int index) {
         if (index > this.getSize()) {
-            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора!");
+            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора! {Размер вектора: " + this.getSize() + "}");
         }
-        this.vector[index] = element;
+
+        return this.coordinates[index];
     }
 
-    public double getElementIndex(int index) {
+    public void setElement(int index, double element) {
         if (index > this.getSize()) {
-            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора!");
+            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора! {Размер вектора: " + this.getSize() + "}");
         }
-        return this.vector[index];
+
+        this.coordinates[index] = element;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Vector vector1 = (Vector) o;
-        return n == vector1.n && Objects.deepEquals(vector, vector1.vector);
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Vector vector = (Vector) o;
+        return vectorLength == vector.vectorLength && Arrays.equals(coordinates, vector.coordinates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(n, Arrays.hashCode(vector));
+        return Objects.hash(vectorLength, Arrays.hashCode(coordinates));
     }
 
-    public static Vector sumVectors(Vector vector1, Vector vector2) {
-        int n = vector1.getSize();
-        double[] newVector = new double[n];
-        Vector vector3 = new Vector(n, newVector);
+    public static Vector addVectors(Vector vector1, Vector vector2) {
+        vector1.add(vector2);
 
-        for (int i = 0; i < n; i++) {
-            newVector[i] = vector1.vector[i] + vector2.vector[i];
-        }
-
-        return vector3;
+        return vector1;
     }
 
-    public static Vector substructionVectors(Vector vector1, Vector vector2) {
-        int n = vector1.getSize();
-        double[] newVector = new double[n];
-        Vector vector3 = new Vector(n, newVector);
+    public static Vector subtractVectors(Vector vector1, Vector vector2) {
+        vector1.subtract(vector2);
 
-        for (int i = 0; i < n; i++) {
-            newVector[i] = vector1.vector[i] - vector2.vector[i];
-        }
-
-        return vector3;
+        return vector1;
     }
 
-    public static double scalarMultiplication(Vector vector1, Vector vector2) {
+    public static double dotProduct(Vector vector1, Vector vector2) {
         double scalarSum = 0;
 
         for (int i = 0; i < vector1.getSize(); i++) {
-            scalarSum += vector1.vector[i] * vector2.vector[i];
+            scalarSum += vector1.coordinates[i] * vector2.coordinates[i];
         }
 
         return scalarSum;
