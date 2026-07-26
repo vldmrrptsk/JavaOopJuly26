@@ -33,12 +33,12 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    private boolean isRangesStrictIntersect(Range range) {
-        return from < range.to && to > range.from;
-    }
-
     private boolean isRangesIntersect(Range range) {
         return from <= range.to && to >= range.from;
+    }
+
+    private boolean isRangesStrictIntersect(Range range) {
+        return from < range.to && to > range.from;
     }
 
     public Range getIntersection(Range range) {
