@@ -27,8 +27,9 @@ public class Main {
         Range range7 = new Range(1, 5);
         Range range8 = new Range(1, 3);
         Range range9 = new Range(2, 3);
+        Range range10 = new Range(1, 3.5);
 
-        Range[] ranges = {range1, range2, range3, range4, range5, range6, range7, range8, range9};
+        Range[] ranges = {range1, range2, range3, range4, range5, range6, range7, range8, range9, range10};
 
         for (int i = 0; i < ranges.length - 1; i++) {
             Range intersection = ranges[i].getIntersection(ranges[i + 1]);

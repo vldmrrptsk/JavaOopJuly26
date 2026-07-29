@@ -33,16 +33,16 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    private boolean isRangesIntersect(Range range) {
+    private boolean areRangesIntersect(Range range) {
         return from <= range.to && to >= range.from;
     }
 
-    private boolean isRangesStrictIntersect(Range range) {
+    private boolean areRangesStrictIntersect(Range range) {
         return from < range.to && to > range.from;
     }
 
     public Range getIntersection(Range range) {
-        if (!isRangesStrictIntersect(range)) {
+        if (!areRangesStrictIntersect(range)) {
             return null;
         }
 
@@ -50,7 +50,7 @@ public class Range {
     }
 
     public Range[] getUnion(Range range) {
-        if (isRangesIntersect(range)) {
+        if (areRangesIntersect(range)) {
             return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
 
@@ -58,12 +58,8 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        if (!isRangesStrictIntersect(range)) {
+        if (!areRangesStrictIntersect(range)) {
             return new Range[]{new Range(from, to)};
-        }
-
-        if (range.from <= from && range.to >= to) {
-            return new Range[0];
         }
 
         if (range.from <= from && range.to < to) {
@@ -86,6 +82,6 @@ public class Range {
 
     @Override
     public String toString() {
-        return "( " + from + ", " + to + ")";
+        return "(" + from + ", " + to + ")";
     }
 }
