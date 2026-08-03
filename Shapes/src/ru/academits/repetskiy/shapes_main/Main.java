@@ -2,6 +2,7 @@ package ru.academits.repetskiy.shapes_main;
 
 import ru.academits.repetskiy.shapes.*;
 import ru.academits.repetskiy.comparator.*;
+
 import java.util.Arrays;
 
 public class Main {
@@ -12,11 +13,9 @@ public class Main {
 
         FigureSorted figureSorted = new FigureSorted();
         figureSorted.sortByMethod(shapes, Shape::getArea);
-
         System.out.println("Фигура с наибольшей площадью " + shapes[0] + " имеет площадь: " + shapes[0].getArea());
 
         figureSorted.sortByMethod(shapes, Shape::getPerimeter);
-
         System.out.println("Фигура со вторым по величине периметром " + shapes[1] + " имеет периметр: " + shapes[1].getPerimeter());
     }
 }
