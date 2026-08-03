@@ -2,9 +2,6 @@ package ru.academits.repetskiy.shapes_main;
 
 import ru.academits.repetskiy.shapes.*;
 import ru.academits.repetskiy.comparator.*;
-
-import ru.academits.repetskiy.comparator.*;
-
 import java.util.Arrays;
 
 public class Main {
