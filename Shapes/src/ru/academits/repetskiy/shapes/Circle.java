@@ -1,7 +1,5 @@
 package ru.academits.repetskiy.shapes;
 
-import java.util.Objects;
-
 public class Circle implements Shape {
     private double radius;
 
@@ -16,7 +14,6 @@ public class Circle implements Shape {
     public void setRadius(double radius) {
         this.radius = radius;
     }
-
 
     @Override
     public double getWidth() {
@@ -40,7 +37,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Circle{radius .2%f}", radius);
+        return String.format("Circle{radius=%.2f}", radius);
     }
 
     @Override

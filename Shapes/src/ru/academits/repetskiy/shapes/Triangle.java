@@ -70,14 +70,14 @@ public class Triangle implements Shape {
     }
 
 
-    private static double getSideLength(double x1, double x2, double y1, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     private double[] getSides() {
-        double a = getSideLength(x2, x3, y2, y3);
-        double b = getSideLength(x1, x3, y1, y3);
-        double c = getSideLength(x1, x2, y1, y2);
+        double a = getSideLength(x2, y2, x3, y3);
+        double b = getSideLength(x1, y1, x3, y3);
+        double c = getSideLength(x1, y1, x2, y2);
 
         return new double[]{a, b, c};
     }
@@ -119,7 +119,7 @@ public class Triangle implements Shape {
     @Override
     public String toString() {
         return String.format("Triangle: {x1 = %.2f, y1 = %.2f, " +
-                        "x2 = %.2f, y2 = %.2f," +
+                        "x2 = %.2f, y2 = %.2f, " +
                         "x3 = %.2f, y3 = %.2f}",
                 x1, y1, x2, y2, x3, y3);
     }
@@ -142,6 +142,7 @@ public class Triangle implements Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x1, y1, x2, y2, x3, y3);
+        return Double.hashCode(x1) + Double.hashCode(y1) + Double.hashCode(x2) + Double.hashCode(y2)
+                + Double.hashCode(x3) + Double.hashCode(y3);
     }
 }

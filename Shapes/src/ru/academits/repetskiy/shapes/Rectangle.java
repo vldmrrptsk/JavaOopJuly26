@@ -50,7 +50,9 @@ public class Rectangle implements Shape {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Rectangle rectangle = (Rectangle) o;
         return width == rectangle.width && height == rectangle.height;
@@ -58,6 +60,6 @@ public class Rectangle implements Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, height);
+        return Double.hashCode(width) + Double.hashCode(height);
     }
 }

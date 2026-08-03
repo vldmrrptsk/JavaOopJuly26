@@ -1,41 +1,25 @@
 package ru.academits.repetskiy.shapes_main;
 
 import ru.academits.repetskiy.shapes.*;
+import ru.academits.repetskiy.comparator.*;
+
+import ru.academits.repetskiy.comparator.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class Main {
-    @SuppressWarnings({"rawtypes", "unchecked"})
-   public static void main(String[] args) {
-        Shape[] shapes = {
-                new Square(10),
-                new Square(10),
-                new Rectangle(10, 3),
-                new Rectangle(1, 20),
-                new Circle(3),
-                new Circle(57),
-                new Triangle(0, 1, 3, 7, 2, 10),
-                new Triangle(0, 100, 3, 7, 2, 20)};
+    public static void main(String[] args) {
+        Shape[] shapes = {new Square(10), new Square(10), new Rectangle(10, 3), new Rectangle(1, 20), new Circle(3), new Circle(57), new Triangle(0, 1, 3, 7, 2, 10), new Triangle(0, 100, 3, 7, 2, 20)};
 
-       Comparator areaComparator = (s1, s2) -> {
-           Shape shape1 = (Shape) s1;
-           Shape shape2 = (Shape) s2;
-           return Double.compare(shape1.getArea(), shape2.getArea());
-       };
+        System.out.println("Список заданных фигур:" + Arrays.toString(shapes));
 
-       Arrays.sort(shapes, areaComparator);
+        FigureSorted figureSorted = new FigureSorted();
+        figureSorted.sortByMethod(shapes, Shape::getArea);
 
-       System.out.println("Фигура с максимальной площадью: " + shapes[0]);
+        System.out.println("Фигура с наибольшей площадью " + shapes[0] + " имеет площадь: " + shapes[0].getArea());
 
-       Comparator perimeterComparator = (s1, s2) -> {
-           Shape shape1 = (Shape) s1;
-           Shape shape2 = (Shape) s2;
-           return Double.compare(shape1.getPerimeter(), shape2.getPerimeter());
-       };
+        figureSorted.sortByMethod(shapes, Shape::getPerimeter);
 
-       Arrays.sort(shapes, perimeterComparator);
-
-       System.out.println("Фигура со вторым по величине периметром: " + shapes[1]);
-   }
+        System.out.println("Фигура со вторым по величине периметром " + shapes[1] + " имеет периметр: " + shapes[1].getPerimeter());
+    }
 }

@@ -7,18 +7,20 @@ public class Square implements Shape {
         this.side = side;
     }
 
-    @Override
-    public double getWidth() {
-        return side;
-    }
+    public double getSide(){return side;}
 
-    public void setWidth(double side) {
+    public void setSide(double side) {
         this.side = side;
     }
 
     @Override
+    public double getWidth() {
+        return getSide();
+    }
+
+    @Override
     public double getHeight() {
-        return side;
+        return getSide();
     }
 
     @Override
