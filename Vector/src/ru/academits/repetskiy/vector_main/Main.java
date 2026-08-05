@@ -2,8 +2,6 @@ package ru.academits.repetskiy.vector_main;
 
 import ru.academits.repetskiy.vector.Vector;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
         Vector vector1 = new Vector(new double[]{1, 2, 3});
@@ -13,21 +11,24 @@ public class Main {
         Vector vector5 = new Vector(5, new double[]{7, 100, 4, 200});
 
         Vector[] vectors = {vector1, vector2, vector3, vector4, vector5};
-        for (int i = 0; i < 5; i++) {
-            System.out.printf("Вектор %d, имеет размерность = %d%n", i + 1, vectors[i].getVectorLength());
+        for (int i = 0; i < vectors.length; i++) {
+            System.out.printf("Вектор %d, имеет размерность = %d%n", i + 1, vectors[i].getSize());
         }
 
         System.out.println();
-        System.out.println("Сумма векторов 1 и 4: " + vector1.getAdd(vector4));
+        vector1.add(vector4);
+        System.out.println("Сумма векторов 1 и 4: " + vector1);
 
         System.out.println();
-        System.out.println("Сумма векторов 1 и 5: " + vector1.getAdd(vector5));
+        vector1.add(vector5);
+        System.out.println("Сумма векторов 1 и 5: " + vector1);
 
         System.out.println();
-        System.out.println("Разность векторов 4 и 3: " + vector4.getSubtract(vector3));
+        vector4.subtract(vector3);
+        System.out.println("Разность векторов 4 и 3: " + vector4);
 
         System.out.println();
-        vector4.turnOverVector();
+        vector4.turnOver();
         System.out.println("Разворот вектора 4: " + vector4);
 
         System.out.println();
@@ -46,6 +47,6 @@ public class Main {
         System.out.println();
         System.out.println("Сумма векторов 3 и 4: " + Vector.getSum(vector3, vector4));
 
-        System.out.println("Хэш-Код вектора 3:" + vector3.hashCode());
+        System.out.println("Хэш-Код вектора 3: " + vector3.hashCode());
     }
 }
