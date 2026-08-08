@@ -92,14 +92,14 @@ public class Triangle implements Shape {
     @Override
     public double getArea() {
         double[] sides = getSides();
+
         double a = sides[0];
         double b = sides[1];
         double c = sides[2];
 
         double halfPerimeter = (a + b + c) / 2;
 
-        return Math.sqrt(halfPerimeter * (halfPerimeter - a) *
-                (halfPerimeter - b) * (halfPerimeter - c));
+        return Math.sqrt(halfPerimeter * (halfPerimeter - a) * (halfPerimeter - b) * (halfPerimeter - c));
     }
 
     @Override
@@ -140,6 +140,7 @@ public class Triangle implements Shape {
     @Override
     public int hashCode() {
         final int prime = 37;
+
         int hash = 1;
         hash = prime * hash + Double.hashCode(x1);
         hash = prime * hash + Double.hashCode(y1);

@@ -1,7 +1,7 @@
 package ru.academits.repetskiy.shapes_main;
 
 import ru.academits.repetskiy.shapes.*;
-import ru.academits.repetskiy.comparators.*;
+import ru.academits.repetskiy.shape_comparators.*;
 
 import java.util.Arrays;
 
