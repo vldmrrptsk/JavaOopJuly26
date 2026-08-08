@@ -1,7 +1,5 @@
 package ru.academits.repetskiy.shapes;
 
-import java.util.Objects;
-
 public class Triangle implements Shape {
     private double x1;
     private double y1;
@@ -69,7 +67,6 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
-
     private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
@@ -94,15 +91,15 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double halfPerimeter = getPerimeter() / 2;
-        double halfPerimeterMinusSideProduct = 1;
         double[] sides = getSides();
+        double a = sides[0];
+        double b = sides[1];
+        double c = sides[2];
 
-        for (double side : sides) {
-            halfPerimeterMinusSideProduct *= halfPerimeter - side;
-        }
+        double halfPerimeter = (a + b + c) / 2;
 
-        return Math.sqrt(halfPerimeter * halfPerimeterMinusSideProduct);
+        return Math.sqrt(halfPerimeter * (halfPerimeter - a) *
+                (halfPerimeter - b) * (halfPerimeter - c));
     }
 
     @Override
@@ -142,7 +139,15 @@ public class Triangle implements Shape {
 
     @Override
     public int hashCode() {
-        return Double.hashCode(x1) + Double.hashCode(y1) + Double.hashCode(x2) + Double.hashCode(y2)
-                + Double.hashCode(x3) + Double.hashCode(y3);
+        final int prime = 37;
+        int hash = 1;
+        hash = prime * hash + Double.hashCode(x1);
+        hash = prime * hash + Double.hashCode(y1);
+        hash = prime * hash + Double.hashCode(x2);
+        hash = prime * hash + Double.hashCode(y2);
+        hash = prime * hash + Double.hashCode(x3);
+        hash = prime * hash + Double.hashCode(y3);
+
+        return hash;
     }
 }
