@@ -1,7 +1,7 @@
 package ru.academits.repetskiy.shapes_main;
 
 import ru.academits.repetskiy.shapes.*;
-import ru.academits.repetskiy.shape_comparators.*;
+import ru.academits.repetskiy.shapes_comparators.*;
 
 import java.util.Arrays;
 
@@ -20,10 +20,10 @@ public class Main {
 
         System.out.println("Список заданных фигур: " + Arrays.toString(shapes));
 
-        Arrays.sort(shapes, new ShapeAreaComparator());
-        System.out.println("Фигура с наибольшей площадью " + shapes[0] + " имеет площадь: " + shapes[0].getArea());
+        Arrays.sort(shapes, new ShapeAreaComparator().reversed());
+        System.out.println("Фигура с наибольшей площадью " + shapes[0] + " имеет площадь: " + Math.round(shapes[0].getArea()));
 
-        Arrays.sort(shapes, new ShapePerimeterComparator());
-        System.out.println("Фигура со вторым по величине периметром " + shapes[1] + " имеет периметр: " + shapes[1].getPerimeter());
+        Arrays.sort(shapes, new ShapePerimeterComparator().reversed());
+        System.out.println("Фигура со вторым по величине периметром " + shapes[1] + " имеет периметр: " + Math.round(shapes[1].getPerimeter()));
     }
 }

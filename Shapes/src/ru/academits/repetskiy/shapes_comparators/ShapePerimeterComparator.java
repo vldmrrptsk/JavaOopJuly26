@@ -1,4 +1,4 @@
-package ru.academits.repetskiy.shape_comparators;
+package ru.academits.repetskiy.shapes_comparators;
 
 import ru.academits.repetskiy.shapes.Shape;
 import java.util.Comparator;
