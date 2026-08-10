@@ -39,41 +39,57 @@ public class Vector {
 
     @Override
     public String toString() {
-        String[] stringCoordinates = new String[coordinates.length];
+        StringBuilder string = new StringBuilder();
 
-        for (int i = 0; i < this.getSize(); i++) {
-            stringCoordinates[i] = String.valueOf(coordinates[i]);
+        for (int i = 0; i < coordinates.length; i++) {
+            if (i == 0) {
+                string.append("{");
+            }
+
+            string.append(coordinates[i]);
+
+            if (i < coordinates.length - 1) {
+                string.append(", ");
+            }
+
+            if (i == coordinates.length - 1) {
+                string.append("}");
+            }
         }
 
-        return String.format("{%s}", String.join(", ", stringCoordinates));
+        return string.toString();
     }
 
     public void add(Vector vector) {
-        if (coordinates.length != vector.coordinates.length) {
-            int maxSize = Math.max(coordinates.length, vector.coordinates.length);
+        int maxSize = Math.max(coordinates.length, vector.coordinates.length);
+
+        if (coordinates.length < maxSize) {
             coordinates = Arrays.copyOf(coordinates, maxSize);
-            vector.coordinates = Arrays.copyOf(vector.coordinates, maxSize);
         }
 
-        for (int i = 0; i < coordinates.length; i++) {
-            coordinates[i] += vector.coordinates[i];
+        for (int i = 0; i < maxSize; i++) {
+            if (i < vector.coordinates.length) {
+                coordinates[i] += vector.coordinates[i];
+            }
         }
     }
 
     public void subtract(Vector vector) {
-        if (coordinates.length != vector.coordinates.length) {
-            int maxSize = Math.max(coordinates.length, vector.coordinates.length);
+        int maxSize = Math.max(coordinates.length, vector.coordinates.length);
+
+        if (coordinates.length < maxSize) {
             coordinates = Arrays.copyOf(coordinates, maxSize);
-            vector.coordinates = Arrays.copyOf(vector.coordinates, maxSize);
         }
 
-        for (int i = 0; i < coordinates.length; i++) {
-            coordinates[i] -= vector.coordinates[i];
+        for (int i = 0; i < maxSize; i++) {
+            if (i < vector.coordinates.length) {
+                coordinates[i] -= vector.coordinates[i];
+            }
         }
     }
 
     public void multiplyByScalar(double scalar) {
-        for (int i = 0; i < this.getSize(); i++) {
+        for (int i = 0; i < coordinates.length; i++) {
             coordinates[i] *= scalar;
         }
     }
@@ -83,18 +99,17 @@ public class Vector {
     }
 
     public double getCoordinate(int index) {
-        if (index < 0 || index > coordinates.length) {
-            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора! {Размер вектора: " + coordinates.length + "}");
+        if (index < 0 || index >= coordinates.length) {
+            throw new IndexOutOfBoundsException("Индекс " + index + " вне допустимого диапазона [0, " + (coordinates.length - 1) + "]. Размер вектора: " + coordinates.length);
         }
 
         return coordinates[index];
     }
 
     public void setCoordinate(int index, double coordinate) {
-        if (index < 0 || index > coordinates.length) {
-            throw new IllegalArgumentException("Значение индекса выходит за пределы размера вектора! {Размер вектора: " + coordinates.length + "}");
+        if (index < 0 || index >= coordinates.length) {
+            throw new IndexOutOfBoundsException("Индекс " + index + " вне допустимого диапазона [0, " + (coordinates.length - 1) + "]. Размер вектора: " + coordinates.length);
         }
-
         coordinates[index] = coordinate;
     }
 
@@ -109,7 +124,7 @@ public class Vector {
         }
 
         Vector vector = (Vector) o;
-        return this.getSize() == vector.coordinates.length && Arrays.equals(coordinates, vector.coordinates);
+        return Arrays.equals(coordinates, vector.coordinates);
     }
 
     @Override
@@ -134,13 +149,13 @@ public class Vector {
     }
 
     public static double getDotProduct(Vector vector1, Vector vector2) {
-        int minLength = Math.min(vector1.coordinates.length, vector2.coordinates.length);
-        double scalarDotProductSum = 0;
+        int minSize = Math.min(vector1.coordinates.length, vector2.coordinates.length);
+        double dotProduct = 0;
 
-        for (int i = 0; i < minLength; i++) {
-            scalarDotProductSum += vector1.coordinates[i] * vector2.coordinates[i];
+        for (int i = 0; i < minSize; i++) {
+            dotProduct += vector1.coordinates[i] * vector2.coordinates[i];
         }
 
-        return scalarDotProductSum;
+        return dotProduct;
     }
 }

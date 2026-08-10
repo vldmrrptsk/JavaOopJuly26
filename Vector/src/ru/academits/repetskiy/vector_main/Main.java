@@ -11,6 +11,7 @@ public class Main {
         Vector vector5 = new Vector(5, new double[]{7, 100, 4, 200});
 
         Vector[] vectors = {vector1, vector2, vector3, vector4, vector5};
+
         for (int i = 0; i < vectors.length; i++) {
             System.out.printf("Вектор %d, имеет размерность = %d%n", i + 1, vectors[i].getSize());
         }
