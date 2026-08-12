@@ -34,7 +34,6 @@ public class Main {
         ArrayList<Integer> array = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new FileInputStream("ArrayListHome/src/test.txt"))) {
-
             while (scanner.hasNextLine()) {
                 int number = Integer.parseInt(scanner.nextLine());
                 array.add(number);
