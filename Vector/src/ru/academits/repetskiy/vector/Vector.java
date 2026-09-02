@@ -42,8 +42,10 @@ public class Vector {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('{');
 
-        for (int i = 1; i < coordinates.length - 1; i++) {
-            stringBuilder.append(", ");
+        for (int i = 0; i < coordinates.length; i++) {
+            if (i > 0) {
+                stringBuilder.append(", ");
+            }
 
             stringBuilder.append(coordinates[i]);
         }
@@ -124,30 +126,24 @@ public class Vector {
     }
 
     public double getLength() {
-        double coordinatesOfDegreesSum = 0.0;
+        double squaredSum = 0.0;
 
         for (double coordinate : coordinates) {
-            coordinatesOfDegreesSum += coordinate * coordinate;
+            squaredSum += coordinate * coordinate;
         }
 
-        return Math.sqrt(coordinatesOfDegreesSum);
+        return Math.sqrt(squaredSum);
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        int maxSize = Math.max(vector1.coordinates.length, vector2.coordinates.length);
-        double[] resultCoordinates = Arrays.copyOf(vector1.coordinates, maxSize);
-        Vector resultVector = new Vector(resultCoordinates);
-
+        Vector resultVector = new Vector(Arrays.copyOf(vector1.coordinates, vector1.coordinates.length));
         resultVector.add(vector2);
 
         return resultVector;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        int maxSize = Math.max(vector1.coordinates.length, vector2.coordinates.length);
-        double[] resultCoordinates = Arrays.copyOf(vector1.coordinates, maxSize);
-        Vector resultVector = new Vector(resultCoordinates);
-
+        Vector resultVector = new Vector(Arrays.copyOf(vector1.coordinates, vector1.coordinates.length));
         resultVector.subtract(vector2);
 
         return resultVector;
