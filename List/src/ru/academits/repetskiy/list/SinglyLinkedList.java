@@ -56,7 +56,6 @@ public class SinglyLinkedList<E> {
         return currentItem.getData();
     }
 
-
     public void add(E data) {
         ListItem<E> newItem = new ListItem<E>(data);
 
@@ -87,7 +86,6 @@ public class SinglyLinkedList<E> {
 
         return data;
     }
-
 
     public E remove(int index) {
         rangeCheck(index);
@@ -178,7 +176,6 @@ public class SinglyLinkedList<E> {
             currentItem.setNext(previousItem);
             previousItem = currentItem;
             currentItem = nextItem;
-
         }
 
         head = previousItem;
