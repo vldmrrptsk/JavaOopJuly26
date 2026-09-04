@@ -1,198 +1,211 @@
 package ru.academits.repetskiy.list;
 
-import java.util.ArrayList;
-
-public class SinglyLinkedList<T> {
-    private ListItem<T> head;
+public class SinglyLinkedList<E> {
+    private ListItem<E> head;
     private int size;
-
-    public SinglyLinkedList() {
-    }
 
     public int size() {
         return size;
     }
 
-    public T getFirst() {
+    private void checkAnEmptyList() {
+        if (size == 0) {
+            throw new NullPointerException("Список пустой!");
+        }
+    }
+
+    public E getFirst() {
+        checkAnEmptyList();
+
         return head.getData();
     }
 
-    public T get(int index) {
-        if (index > size) {
-            throw new IllegalArgumentException("Длина списка меньше указанного индекса! " + "{Длина списка: " + size + "}");
-        }
-
-        int currentIndex = 0;
-        ListItem<T> current = head;
-
-        while (currentIndex != index) {
-            current = current.getNext();
-            currentIndex++;
-        }
-
-        return current.getData();
+    private void rangeCheck(int index) {
+        if (index > size || index < 0)
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
     }
 
-    public T replace(int index, T data) {
-        int currentIndex = 0;
-        T oldData = head.getData();
-        ListItem<T> current = head;
+    private ListItem<E> goToIndex(int index) {
+        rangeCheck(index);
 
-        while (currentIndex != index) {
-            current = current.getNext();
-            oldData = current.getData();
-            currentIndex++;
+        ListItem<E> currentItem = head;
+        int i = 0;
+
+        while (i != index) {
+            currentItem = currentItem.getNext();
+            i++;
         }
 
-        current.setData(data);
-
-        return oldData;
+        return currentItem;
     }
 
-    private ListItem<T> getLastItem() {
-        ListItem<T> current = head;
+    public E get(int index) {
+        rangeCheck(index);
 
-        while (current.getNext() != null) {
-            current = current.getNext();
-        }
-
-        return current;
+        return goToIndex(index).getData();
     }
 
-    public void add(T data) {
-        ListItem<T> newItem = new ListItem<T>(data);
+    public E set(int index, E data) {
+        rangeCheck(index);
+
+        ListItem<E> currentItem = head;
+
+        currentItem = goToIndex(index);
+        currentItem.setData(data);
+
+        return currentItem.getData();
+    }
+
+
+    public void add(E data) {
+        ListItem<E> newItem = new ListItem<E>(data);
 
         if (head == null) {
             head = newItem;
         } else {
-            ListItem<T> current = getLastItem();
-            current.setNext(newItem);
+            ListItem<E> currentItem = null;
+
+            currentItem = goToIndex(size - 1);
+
+            currentItem.setNext(newItem);
         }
 
         size++;
     }
 
-    public void addFirstItem(T data) {
+    public void addFirst(E data) {
         head = new ListItem<>(data, head);
         size++;
     }
 
-    public T removeFirstItem() {
-        T data = head.getData();
+    public E removeFirst() {
+        checkAnEmptyList();
+
+        E data = head.getData();
         head = head.getNext();
         size--;
 
         return data;
     }
 
-    public T remove(int index) {
-        if (index >= size) {
-            throw new IllegalArgumentException("Длина списка меньше указанного индекса! " + "{Длина списка: " + size + "}");
-        }
 
-        T currentData = head.getData();
+    public E remove(int index) {
+        rangeCheck(index);
+
+        E currentData = head.getData();
 
         if (index == 0) {
-            currentData = removeFirstItem();
+            currentData = removeFirst();
+
+            return currentData;
         } else {
-            ListItem<T> current = head;
-            ListItem<T> previous = null;
-            int currentIndex = 0;
+            ListItem<E> previousItem = goToIndex(index - 1);
 
-            while (currentIndex < index) {
-                previous = current;
-                current = current.getNext();
-                currentData = current.getData();
-                currentIndex++;
-            }
+            ListItem<E> itemToRemove = previousItem.getNext();
+            E removedData = itemToRemove.getData();
 
-            previous.setNext(current.getNext());
-            current = null;
+            previousItem.setNext(itemToRemove.getNext());
+
+            itemToRemove.setNext(null);
 
             size--;
-        }
 
-        return currentData;
+            return removedData;
+        }
     }
 
-    public void insert(int index, T data) {
-        if (index > size) {
-            throw new IllegalArgumentException("Длина списка меньше указанного индекса! " + "{Длина списка: " + size + "}");
-        }
+    public void add(int index, E data) {
+        rangeCheck(index);
 
         if (index == 0) {
-            addFirstItem(data);
-        } else if (index == size) {
-            add(data);
+            addFirst(data);
         } else {
-            ListItem<T> current = head;
-            ListItem<T> previous = null;
-            int currentIndex = 0;
+            ListItem<E> previousItem = goToIndex(index - 1);
 
-            while (currentIndex < index) {
-                previous = current;
-                current = current.getNext();
-                currentIndex++;
-            }
+            ListItem<E> newItem = new ListItem<E>(data, previousItem.getNext());
 
-            ListItem<T> newItem = new ListItem<T>(data, current);
-            previous.setNext(newItem);
+            previousItem.setNext(newItem);
 
             size++;
         }
     }
 
-    public boolean removeData(T data) {
-        ListItem<T> current = head;
-        ListItem<T> previous = null;
-        int currentIndex = 0;
+    public boolean removeData(E data) {
+        ListItem<E> currentItem = head;
+        ListItem<E> previousItem = null;
+        int i = 0;
 
-        while (currentIndex < size) {
-            if (current.getData() == data) {
-                if (currentIndex == 0) {
-                    removeFirstItem();
+        while (i < size) {
+            if ((E) currentItem.getData() == (E) data) {
+                if (i == 0) {
+                    removeFirst();
                 } else {
-                    previous.setNext(current.getNext());
+                    previousItem.setNext(currentItem.getNext());
                     size--;
                 }
 
-                current = null;
+                currentItem = null;
 
                 return true;
             }
 
-            previous = current;
-            current = current.getNext();
-            currentIndex++;
+            previousItem = currentItem;
+            currentItem = currentItem.getNext();
+            i++;
         }
 
         return false;
     }
 
-    public SinglyLinkedList<T> copy() {
-        ListItem<T> current = head;
-        SinglyLinkedList<T> copyList = new SinglyLinkedList<>();
-        int currentIndex = 0;
+    public SinglyLinkedList<E> copy() {
+        SinglyLinkedList<E> copyList = new SinglyLinkedList<>();
 
-        while (currentIndex < size) {
-            copyList.add(current.getData());
-            current = current.getNext();
-            currentIndex++;
+        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext()) {
+            copyList.add(currentItem.getData());
         }
 
         return copyList;
     }
 
-    @Override
-    public String toString() {
-        ListItem<T> current = head;
-        ArrayList<T> arrayList = new ArrayList<>();
+    public boolean reverse() {
+        checkAnEmptyList();
 
-        while (current != null) {
-            arrayList.add(current.getData());
-            current = current.getNext();
+        ListItem<E> currentItem = head;
+        ListItem<E> previousItem = null;
+
+        while (currentItem != null) {
+            ListItem<E> nextItem = currentItem.getNext();
+            currentItem.setNext(previousItem);
+            previousItem = currentItem;
+            currentItem = nextItem;
+
         }
 
-        return "Список: " + arrayList.toString();
+        head = previousItem;
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        if (head == null) {
+            return "[]";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+
+        ListItem<E> current = head;
+        while (current != null) {
+            stringBuilder.append(current.getData());
+            current = current.getNext();
+
+            if (current != null) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 }
