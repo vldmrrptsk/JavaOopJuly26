@@ -42,12 +42,12 @@ public class Vector {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('{');
 
-        for (int i = 0; i < coordinates.length; i++) {
-            if (i > 0) {
-                stringBuilder.append(", ");
-            }
+        for (double coordinate : coordinates) {
+            stringBuilder.append(coordinate).append(", ");
+        }
 
-            stringBuilder.append(coordinates[i]);
+        if (coordinates.length > 0) {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         }
 
         stringBuilder.append('}');
@@ -136,14 +136,14 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        Vector resultVector = new Vector(Arrays.copyOf(vector1.coordinates, vector1.coordinates.length));
+        Vector resultVector = new Vector(vector1);
         resultVector.add(vector2);
 
         return resultVector;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        Vector resultVector = new Vector(Arrays.copyOf(vector1.coordinates, vector1.coordinates.length));
+        Vector resultVector = new Vector(vector1);
         resultVector.subtract(vector2);
 
         return resultVector;
