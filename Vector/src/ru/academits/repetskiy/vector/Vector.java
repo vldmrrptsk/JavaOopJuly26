@@ -133,14 +133,16 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        Vector resultVector = new Vector(vector1.coordinates.length, vector1.coordinates);
+        int maxSize = Math.max(vector1.coordinates.length, vector2.coordinates.length);
+        Vector resultVector = new Vector(maxSize, vector1.coordinates);
         resultVector.add(vector2);
 
         return resultVector;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        Vector resultVector = new Vector(vector1.coordinates.length, vector1.coordinates);
+        int maxSize = Math.max(vector1.coordinates.length, vector2.coordinates.length);
+        Vector resultVector = new Vector(maxSize, vector1.coordinates);
         resultVector.subtract(vector2);
 
         return resultVector;
