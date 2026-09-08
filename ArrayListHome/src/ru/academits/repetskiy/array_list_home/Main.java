@@ -2,24 +2,28 @@ package ru.academits.repetskiy.array_list_home;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
-    public static void removeEvenNumbers(ArrayList<Integer> arrayList) {
-        Iterator<Integer> iterator = arrayList.iterator();
+    public static void removeEvenNumbers(List<Integer> list) {
+        int listSize = list.size();
+        int k = 0;
 
-        while (iterator.hasNext()) {
-            int element = iterator.next();
-            if (element % 2 == 0) {
-                iterator.remove(); // Безопасное удаление через итератор
+        for (int j = 0; j < listSize; j++) {
+            if (list.get(j) % 2 != 0) {
+                list.set(k, list.get(j));
+                k++;
             }
         }
+
+        list.subList(k, listSize).clear();
     }
 
-    public static <T> ArrayList<T> getUnique(ArrayList<T> arrayList) {
-        ArrayList<T> uniqueElementsArray = new ArrayList<>(arrayList.size());
+    public static <T> List<T> getUniqueNumbers(List<T> list) {
+        List<T> uniqueElementsArray = new ArrayList<>(list.size());
 
-        for (T element : arrayList) {
+        for (T element : list) {
             if (!uniqueElementsArray.contains(element)) {
                 uniqueElementsArray.add(element);
             }
@@ -28,39 +32,34 @@ public class Main {
         return uniqueElementsArray;
     }
 
-    public static void main(String[] args) throws IOException {
-        String filePath = "ArrayListHome/src/test.txt";
+    public static List<String> getStringLinesFromFile(String filePath) {
+        List<String> lines = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            ArrayList<String> lines = new ArrayList<>();
             String line;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-
         } catch (IOException e) {
             System.err.println("Ошибка чтения файла: " + e.getMessage());
         }
 
-        ArrayList<Integer> numbers = new ArrayList<>();
-        numbers.add(10);
-        numbers.add(15);
-        numbers.add(20);
-        numbers.add(25);
-        numbers.add(30);
-        numbers.add(15);
-        numbers.add(35);
-        numbers.add(40);
-        numbers.add(25);
-        numbers.add(45);
+        return lines;
+    }
+
+    public static void main(String[] args) {
+        List<String> lines = getStringLinesFromFile("ArrayListHome/src/test.txt");
+        System.out.println("Строки из файла: " + lines);
+
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(10, 12, 20, 15, 25, 35, 98, 101));
 
         System.out.println("Исходный список чисел: " + numbers);
 
         removeEvenNumbers(numbers);
         System.out.println("После удаления четных: " + numbers);
 
-        ArrayList<Integer> uniqueArray = getUnique(numbers);
-        System.out.println("Уникальные элементы: " + uniqueArray);
+        List<Integer> uniqueNumbers = getUniqueNumbers(numbers);
+        System.out.println("Уникальные элементы: " + uniqueNumbers);
     }
 }
