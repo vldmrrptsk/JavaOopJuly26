@@ -7,12 +7,11 @@ import java.util.List;
 
 public class Main {
     public static void removeEvenNumbers(List<Integer> list) {
-        int listSize = list.size();
         int j = 0;
 
-        for (int i = 0; i < listSize; i++) {
-            if (list.get(i) % 2 != 0) {
-                list.set(j, list.get(i));
+        for (int number : list) {
+            if (number % 2 != 0) {
+                list.set(j, number);
                 j++;
             }
         }
@@ -23,36 +22,36 @@ public class Main {
     }
 
     public static <T> List<T> getDistinctElements(List<T> list) {
-        List<T> uniqueElementsArray = new ArrayList<>(list.size());
+        List<T> distinctElementsList = new ArrayList<>(list.size());
 
         for (T element : list) {
-            if (!uniqueElementsArray.contains(element)) {
-                uniqueElementsArray.add(element);
+            if (!distinctElementsList.contains(element)) {
+                distinctElementsList.add(element);
             }
         }
 
-        return uniqueElementsArray;
+        return distinctElementsList;
     }
 
     public static List<String> readLinesFromFile(String filePath) throws IOException {
-        List<String> lines = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            List<String> lines = new ArrayList<>();
             String line;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-        }
 
-        return lines;
+            return lines;
+        }
     }
 
     public static void main(String[] args) {
         String filePath = "ArrayListHome/src/test.txt";
-        List<String> lines;
 
         try {
+            List<String> lines;
             lines = readLinesFromFile(filePath);
             System.out.println("Строки из файла: " + lines);
         } catch (FileNotFoundException e) {
@@ -68,7 +67,7 @@ public class Main {
         removeEvenNumbers(numbers);
         System.out.println("После удаления четных: " + numbers);
 
-        List<Integer> uniqueNumbers = getDistinctElements(numbers);
-        System.out.println("Уникальные элементы: " + uniqueNumbers);
+        List<Integer> distinctNumbers = getDistinctElements(numbers);
+        System.out.println("Уникальные элементы: " + distinctNumbers);
     }
 }
