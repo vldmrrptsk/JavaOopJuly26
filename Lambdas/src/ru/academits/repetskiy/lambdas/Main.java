@@ -26,19 +26,19 @@ public class Main {
         System.out.println("Список уникальных имен: " + uniqueNames);
         System.out.println();
 
-        String names = persons.stream()
+        String uniqueStringNames = persons.stream()
                 .map(Person::getName)
                 .distinct()
                 .collect(Collectors.joining(", ", "Имена: ", "."));
-        System.out.println(names);
+        System.out.println(uniqueStringNames);
         System.out.println();
 
-        double averageAgeByPerson = persons.stream()
+        double averageAgeInListPeople = persons.stream()
                 .filter(p -> p.getAge() < 18)
                 .mapToInt(Person::getAge)
                 .average()
-                .orElseThrow();
-        System.out.println("Средний возраст каждого из списка людей: " + String.format("%.2f", averageAgeByPerson));
+                .orElse(0.0);
+        System.out.printf("Средний возраст каждого из списка людей: %.2f%n", averageAgeInListPeople);
         System.out.println();
 
         Map<String, Double> averageAgesByNames = persons.stream()
@@ -48,10 +48,9 @@ public class Main {
 
         List<String> sortedNamesByAge = persons.stream()
                 .filter(p -> p.getAge() >= 20 && p.getAge() <= 45)
-                .sorted(Comparator.comparingInt(Person::getAge))
+                .sorted(Comparator.comparingInt(Person::getAge).reversed())
                 .map(Person::getName)
-                .toList()
-                .reversed();
+                .toList();
         System.out.println("Список имен по условию: " + sortedNamesByAge);
     }
 }
