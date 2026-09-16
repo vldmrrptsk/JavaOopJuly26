@@ -2,6 +2,8 @@ package ru.academits.repetskiy.vector;
 
 import java.util.Arrays;
 
+import static java.util.Arrays.copyOf;
+
 public class Vector {
     private double[] coordinates;
 
@@ -11,6 +13,10 @@ public class Vector {
         }
 
         coordinates = new double[size];
+    }
+
+    public double[] toArray(){
+        return Arrays.copyOf(coordinates, coordinates.length);
     }
 
     public Vector(Vector vector) {
@@ -30,7 +36,7 @@ public class Vector {
             throw new IllegalArgumentException("Размер вектора должен быть больше 0: " + size);
         }
 
-        coordinates = Arrays.copyOf(array, size);
+        coordinates = copyOf(array, size);
     }
 
     public int getSize() {
@@ -54,7 +60,7 @@ public class Vector {
 
     public void add(Vector vector) {
         if (coordinates.length < vector.coordinates.length) {
-            coordinates = Arrays.copyOf(coordinates, vector.coordinates.length);
+            coordinates = copyOf(coordinates, vector.coordinates.length);
         }
 
         for (int i = 0; i < vector.coordinates.length; i++) {
@@ -64,7 +70,7 @@ public class Vector {
 
     public void subtract(Vector vector) {
         if (coordinates.length < vector.coordinates.length) {
-            coordinates = Arrays.copyOf(coordinates, vector.coordinates.length);
+            coordinates = copyOf(coordinates, vector.coordinates.length);
         }
 
         for (int i = 0; i < vector.coordinates.length; i++) {
