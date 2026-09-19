@@ -11,7 +11,7 @@
 | 5 | List | - |
 | 6 | ArrayList | - |
 | 7 | HashTable | - |
-| 8 | Tree | - |
+| 8 | Tree | 0 |
 | 9 | Temperature | 0 |
 | 10 | MinesweeperUI | 0 |
 | 11 | Перенос кода в Github | + |
