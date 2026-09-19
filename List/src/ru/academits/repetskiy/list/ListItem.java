@@ -1,6 +1,6 @@
 package ru.academits.repetskiy.list;
 
-public class ListItem<E> {
+class ListItem<E> {
     private E data;
     private ListItem<E> next;
 
