@@ -12,11 +12,11 @@
 | 6 | ArrayList | - |
 | 7 | HashTable | - |
 | 8 | Tree | - |
-| 9 | Temperature | - |
-| 10 | MinesweeperUI | - |
+| 9 | Temperature | 0 |
+| 10 | MinesweeperUI | 0 |
 | 11 | Перенос кода в Github | + |
 | 12 | Range | + |
 | 13 | Range* | + |
 | 14 | ArrayListHome | + |
 | 15 | Лямбды | - |
-| 16 | Graph* | - |
+| 16 | Graph* | 0 |
