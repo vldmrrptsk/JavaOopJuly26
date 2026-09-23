@@ -1,9 +1,6 @@
 package ru.academits.repetskiy.lambdas;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -26,19 +23,23 @@ public class Main {
         System.out.println("Список уникальных имен: " + uniqueNames);
         System.out.println();
 
-        String uniqueStringNames = persons.stream()
+        String joinedUniqueNames = persons.stream()
                 .map(Person::getName)
                 .distinct()
                 .collect(Collectors.joining(", ", "Имена: ", "."));
-        System.out.println(uniqueStringNames);
+        System.out.println(joinedUniqueNames);
         System.out.println();
 
-        double averageAgeInListPeople = persons.stream()
+        OptionalDouble averageMinorAge = persons.stream()
                 .filter(p -> p.getAge() < 18)
                 .mapToInt(Person::getAge)
-                .average()
-                .orElse(0.0);
-        System.out.printf("Средний возраст каждого из списка людей: %.2f%n", averageAgeInListPeople);
+                .average();
+
+        if (averageMinorAge.isPresent()) {
+            System.out.printf("Средний возраст каждого из списка людей: %.2f%n", averageMinorAge.getAsDouble());
+        } else {
+            System.out.println("Нет человека для расчёта среднего возраста.");
+        }
         System.out.println();
 
         Map<String, Double> averageAgesByNames = persons.stream()

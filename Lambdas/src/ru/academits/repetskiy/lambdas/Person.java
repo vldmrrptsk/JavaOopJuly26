@@ -8,6 +8,7 @@ public class Person {
         if (age <= 0) {
             throw new IllegalArgumentException("Возраст должен быть больше 0: " + age);
         }
+
         if (name == null) {
             throw new NullPointerException("Имя не должно быть NULL!");
         }
