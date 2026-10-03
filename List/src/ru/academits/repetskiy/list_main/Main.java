@@ -21,7 +21,7 @@ public class Main {
         System.out.println(list.removeFirst());
         System.out.println("Удалил первый элемент: " + list);
 
-        System.out.println(list.remove(3));
+        System.out.println(list.remove(2));
         System.out.println("Удалил элемент по индексу: " + list);
 
         list.add(2, 40);

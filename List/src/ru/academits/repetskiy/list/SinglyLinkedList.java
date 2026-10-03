@@ -11,25 +11,27 @@ public class SinglyLinkedList<E> {
         return size;
     }
 
-    private void isListEmpty() {
+    private void checkListEmpty() {
         if (size == 0) {
             throw new NoSuchElementException("Список пустой!");
         }
     }
 
     public E getFirst() {
-        isListEmpty();
+        checkListEmpty();
 
         return head.getData();
     }
 
-    private void rangeCheck(int index) {
+    private void checkIndex(int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+            throw new IndexOutOfBoundsException(
+                    "Индекс не попадает в диапазон списка: " + index
+                            + ", допустимый диапазон [0, " + (size - 1) + "]");
         }
     }
 
-    private ListItem<E> getElement(int index) {
+    private ListItem<E> getItem(int index) {
         ListItem<E> currentItem = head;
 
         for (int i = 0; i < index; i++) {
@@ -40,34 +42,21 @@ public class SinglyLinkedList<E> {
     }
 
     public E get(int index) {
-        rangeCheck(index);
+        checkIndex(index);
 
-        return getElement(index).getData();
+        return getItem(index).getData();
     }
 
     public E set(int index, E data) {
-        rangeCheck(index);
+        ListItem<E> currentItem = getItem(index);
+        E oldData = currentItem.getData();
+        currentItem.setData(data);
 
-        ListItem<E> currentItem = head;
-
-        if (index == 0) {
-            head.setData(data);
-        } else {
-            currentItem = getElement(index - 1);
-            currentItem.setNext(new ListItem<>(data, currentItem.getNext()));
-        }
-
-        size++;
-
-        return currentItem.getData();
+        return oldData;
     }
 
     public void add(E data) {
-        if (head == null) {
-            addFirst(data);
-        } else {
-            set(size - 1, data);
-        }
+        add(size, data);
     }
 
     public void addFirst(E data) {
@@ -76,7 +65,7 @@ public class SinglyLinkedList<E> {
     }
 
     public E removeFirst() {
-        isListEmpty();
+        checkListEmpty();
 
         E data = head.getData();
         head = head.getNext();
@@ -86,13 +75,13 @@ public class SinglyLinkedList<E> {
     }
 
     public E remove(int index) {
-        rangeCheck(index);
+        checkIndex(index);
 
         if (index == 0) {
             return removeFirst();
         }
 
-        ListItem<E> previousItem = getElement(index - 1);
+        ListItem<E> previousItem = getItem(index - 1);
         ListItem<E> itemToRemove = previousItem.getNext();
         E removedData = itemToRemove.getData();
         previousItem.setNext(itemToRemove.getNext());
@@ -102,24 +91,31 @@ public class SinglyLinkedList<E> {
     }
 
     public void add(int index, E data) {
-        set(index, data);
+        checkIndex(index);
+
+        if (index == 0) {
+            addFirst(data);
+            return;
+        }
+
+        ListItem<E> previousItem = getItem(index - 1);
+        ListItem<E> newNode = new ListItem<>(data, previousItem.getNext());
+        previousItem.setNext(newNode);
+        size++;
     }
 
     public boolean removeData(E data) {
         ListItem<E> currentItem = head;
         ListItem<E> previousItem = null;
 
-        while (currentItem.getNext() != null) {
-            if (currentItem.getData().equals(data)) {
-                if (head.getData().equals(data)) {
+        while (currentItem != null) {
+            if (Objects.equals(currentItem.getData(), data)) {
+                if (previousItem == null) {
                     removeFirst();
                 } else {
-                    assert previousItem != null; // Как сделать без assert?
                     previousItem.setNext(currentItem.getNext());
                     size--;
                 }
-
-                currentItem.setNext(null);
 
                 return true;
             }
@@ -133,7 +129,10 @@ public class SinglyLinkedList<E> {
 
     public SinglyLinkedList<E> copy() {
         SinglyLinkedList<E> copyList = new SinglyLinkedList<>();
-        copyList.head = new ListItem<>(this.head.getData(), this.head.getNext());
+
+        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext()) {
+            copyList.add(currentItem.getData());
+        }
 
         return copyList;
     }
@@ -168,9 +167,8 @@ public class SinglyLinkedList<E> {
         ListItem<E> currentItem = head;
 
         while (currentItem != null) {
-            stringBuilder.append(currentItem.getData());
+            stringBuilder.append(currentItem.getData()).append(", ");
             currentItem = currentItem.getNext();
-            stringBuilder.append(", ");
         }
 
         stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
@@ -181,15 +179,41 @@ public class SinglyLinkedList<E> {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        SinglyLinkedList<?> that = (SinglyLinkedList<?>) o;
-        return size == that.size && Objects.equals(head, that.head);
+
+        SinglyLinkedList<?> other = (SinglyLinkedList<?>) o;
+        if (size != other.size) {
+            return false;
+        }
+
+        ListItem<?> currentItem = head;
+        ListItem<?> otherCurrentItem = other.head;
+
+        while (currentItem != null && otherCurrentItem != null) {
+            if (!Objects.equals(currentItem.getData(), otherCurrentItem.getData())) {
+                return false;
+            }
+
+            currentItem = currentItem.getNext();
+            otherCurrentItem = otherCurrentItem.getNext();
+        }
+
+        return currentItem == null && otherCurrentItem == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(head, size);
+        int result = 1;
+        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext()) {
+            result = 31 * result + Objects.hashCode(currentItem.getData());
+        }
+
+        return result;
     }
 }
