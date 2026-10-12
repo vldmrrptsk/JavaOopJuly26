@@ -25,11 +25,16 @@ public class Matrix {
     }
 
     public Matrix(double[][] matrix) {
+        Objects.requireNonNull(matrix, "Матрица не должна быть null");
+
         if (matrix.length == 0) {
             throw new IllegalArgumentException("Количество строк матрицы должно быть больше 0");
         }
 
-        int columnsCount = matrix[0].length;
+        int columnsCount = 0;
+        for (double[] row : matrix) {
+            columnsCount = Math.max(columnsCount, row.length);
+        }
 
         if (columnsCount == 0) {
             throw new IllegalArgumentException("Количество столбцов матрицы должно быть больше 0");
@@ -38,11 +43,15 @@ public class Matrix {
         rows = new Vector[matrix.length];
 
         for (int i = 0; i < matrix.length; i++) {
-            if (matrix[i].length != columnsCount) {
-                throw new IllegalArgumentException("Строки матрицы должны быть одинаковой длины: " + matrix[i].length + " != " + columnsCount);
+            double[] row = matrix[i];
+
+            if (row.length < columnsCount) {
+                double[] rowExtended = new double[columnsCount];
+                System.arraycopy(row, 0, rowExtended, 0, row.length);
+                row = rowExtended;
             }
 
-            rows[i] = new Vector(matrix[i]);
+            rows[i] = new Vector(row);
         }
     }
 
@@ -57,6 +66,8 @@ public class Matrix {
     }
 
     public Matrix(Vector[] vectors) {
+        Objects.requireNonNull(vectors, "Матрица не должна быть null");
+
         if (vectors.length == 0) {
             throw new IllegalArgumentException("Количество строк матрицы должно быть больше 0");
         }
@@ -67,14 +78,19 @@ public class Matrix {
             columnsCount = Math.max(vector.getSize(), columnsCount);
         }
 
-        if (columnsCount == 0) {
-            throw new IllegalArgumentException("Количество столбцов матрицы должно быть больше 0");
-        }
-
         rows = new Vector[vectors.length];
 
         for (int i = 0; i < vectors.length; i++) {
-            rows[i] = new Vector(columnsCount, vectors[i].toArray());
+            double[] vectorExtended = new double[columnsCount];
+
+            if (vectors[i].getLength() < columnsCount) {
+                for (int j = 0; j < vectors[i].getLength(); j++) {
+                    vectorExtended[j] = vectors[i].getCoordinate(j);
+                }
+                rows[i] = new Vector(vectorExtended);
+            } else {
+                rows[i] = new Vector(vectors[i]);
+            }
         }
     }
 
@@ -100,9 +116,10 @@ public class Matrix {
 
     public void setRow(int index, Vector vector) {
         Objects.requireNonNull(vector, "Вектор не должен быть null");
+        checkIndex(index);
 
         if (vector.getSize() != getColumnsCount()) {
-            throw new IllegalArgumentException("Размер вектора должен совпадать с количеством столбцов матрицы: " + vector.getSize() + " != " + getColumnsCount());
+            throw new IllegalArgumentException("Размер вектора: " + vector.getSize() + " должен совпадать с количеством столбцов матрицы: " + getColumnsCount());
         }
 
         checkIndex(index);
@@ -112,7 +129,7 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= getColumnsCount()) {
-            throw new IndexOutOfBoundsException("Индекс должен быть в диапазоне от 0 до " + (getColumnsCount() - 1) + ": " + index);
+            throw new IndexOutOfBoundsException("Индекс: " + index + " должен быть в диапазоне от 0 до " + (getColumnsCount() - 1));
         }
 
         double[] columnData = new double[rows.length];
@@ -140,12 +157,16 @@ public class Matrix {
         }
     }
 
-    public void add(Matrix matrix) {
+    private void checkMatrix(Matrix matrix) {
         Objects.requireNonNull(matrix, "Матрица не должна быть null");
 
         if (rows.length != matrix.rows.length || getColumnsCount() != matrix.getColumnsCount()) {
             throw new IllegalArgumentException("Размерности матриц должны совпадать: " + rows.length + "x" + getColumnsCount() + " != " + matrix.rows.length + "x" + matrix.getColumnsCount());
         }
+    }
+
+    public void add(Matrix matrix) {
+        checkMatrix(matrix);
 
         for (int i = 0; i < rows.length; i++) {
             rows[i].add(matrix.rows[i]);
@@ -153,11 +174,7 @@ public class Matrix {
     }
 
     public void subtract(Matrix matrix) {
-        Objects.requireNonNull(matrix, "Матрица не должна быть null");
-
-        if (rows.length != matrix.rows.length || getColumnsCount() != matrix.getColumnsCount()) {
-            throw new IllegalArgumentException("Размерности матриц должны совпадать: " + rows.length + "x" + getColumnsCount() + " != " + matrix.rows.length + "x" + matrix.getColumnsCount());
-        }
+        checkMatrix(matrix);
 
         for (int i = 0; i < rows.length; i++) {
             rows[i].subtract(matrix.rows[i]);
@@ -172,10 +189,11 @@ public class Matrix {
 
     public double getDeterminant() {
         if (rows.length != getColumnsCount()) {
-            throw new IllegalArgumentException("Матрица должна быть квадратной: " + rows.length + "x" + getColumnsCount());
+            throw new IllegalStateException("Матрица должна быть квадратной: " + rows.length + "x" + getColumnsCount());
         }
 
         final double EPSILON = 1e-10;
+
         int matrixSize = rows.length;
         Vector[] matrixRowsCopy = new Vector[matrixSize];
 
@@ -183,7 +201,7 @@ public class Matrix {
             matrixRowsCopy[i] = new Vector(rows[i]);
         }
 
-        double determinant = 1.0;
+        double determinant = 1;
 
         for (int i = 0; i < matrixSize; i++) {
             int maxRowIndex = i;
@@ -199,7 +217,7 @@ public class Matrix {
             }
 
             if (maxValue < EPSILON) {
-                return 0.0;
+                return 0;
             }
 
             if (maxRowIndex != i) {
@@ -240,9 +258,16 @@ public class Matrix {
         return new Vector(vectorCoordinates);
     }
 
+    private static void checkMatrixCompatibility(Matrix matrix1, Matrix matrix2) {
+        if (matrix1.rows.length != matrix2.rows.length || matrix1.getColumnsCount() != matrix2.getColumnsCount()) {
+            throw new IllegalArgumentException("Размерности матриц должны совпадать: " + matrix1.rows.length + "x" + matrix2.rows.length + " != " + matrix1.getColumnsCount() + "x" + matrix2.getColumnsCount());
+        }
+    }
+
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
         Objects.requireNonNull(matrix1, "Первая матрица не должна быть null");
         Objects.requireNonNull(matrix2, "Вторая матрица не должна быть null");
+        checkMatrixCompatibility(matrix1, matrix2);
 
         Matrix resultMatrix = new Matrix(matrix1);
         resultMatrix.add(matrix2);
@@ -253,6 +278,7 @@ public class Matrix {
     public static Matrix getDifference(Matrix matrix1, Matrix matrix2) {
         Objects.requireNonNull(matrix1, "Первая матрица не должна быть null");
         Objects.requireNonNull(matrix2, "Вторая матрица не должна быть null");
+        checkMatrixCompatibility(matrix1, matrix2);
 
         Matrix resultMatrix = new Matrix(matrix1);
         resultMatrix.subtract(matrix2);
@@ -275,7 +301,7 @@ public class Matrix {
 
         for (int i = 0; i < resultRowsCount; i++) {
             for (int j = 0; j < resultColumnsCount; j++) {
-                double element = 0.0;
+                double element = 0;
 
                 for (int k = 0; k < matrix1.getColumnsCount(); k++) {
                     element += matrix1.rows[i].getCoordinate(k) * matrix2.rows[k].getCoordinate(j);
