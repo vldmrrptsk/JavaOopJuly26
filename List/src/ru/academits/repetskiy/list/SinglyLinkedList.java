@@ -24,10 +24,9 @@ public class SinglyLinkedList<E> {
     }
 
     private void checkIndex(int index) {
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(
-                    "Индекс не попадает в диапазон списка: " + index
-                            + ", допустимый диапазон [0, " + (size - 1) + "]");
+                    "Индекс не попадает в диапазон списка: " + index + ", допустимый диапазон [0, " + (size - 1) + "]");
         }
     }
 
@@ -48,6 +47,8 @@ public class SinglyLinkedList<E> {
     }
 
     public E set(int index, E data) {
+        checkIndex(index);
+
         ListItem<E> currentItem = getItem(index);
         E oldData = currentItem.getData();
         currentItem.setData(data);
@@ -91,7 +92,10 @@ public class SinglyLinkedList<E> {
     }
 
     public void add(int index, E data) {
-        checkIndex(index);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException(
+                    "Индекс не попадает в диапазон списка: " + index + ", допустимый диапазон [0, " + (size - 1) + "]");
+        }
 
         if (index == 0) {
             addFirst(data);
@@ -99,8 +103,7 @@ public class SinglyLinkedList<E> {
         }
 
         ListItem<E> previousItem = getItem(index - 1);
-        ListItem<E> newNode = new ListItem<>(data, previousItem.getNext());
-        previousItem.setNext(newNode);
+        previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
         size++;
     }
 
@@ -130,10 +133,20 @@ public class SinglyLinkedList<E> {
     public SinglyLinkedList<E> copy() {
         SinglyLinkedList<E> copyList = new SinglyLinkedList<>();
 
-        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext()) {
-            copyList.add(currentItem.getData());
+        if (head == null){
+            return copyList;
         }
 
+        copyList.head = new ListItem<>(head.getData(), null);
+        ListItem<E> currentItem = head.getNext();
+        ListItem<E> currentCopyItem = copyList.head;
+
+        while(currentItem != null){
+            currentCopyItem.setNext(new ListItem<>(currentItem.getData(), currentItem.getNext()));
+            currentItem = currentItem.getNext();
+        }
+
+        copyList.size = size;
         return copyList;
     }
 
@@ -188,6 +201,7 @@ public class SinglyLinkedList<E> {
         }
 
         SinglyLinkedList<?> other = (SinglyLinkedList<?>) o;
+
         if (size != other.size) {
             return false;
         }
@@ -196,7 +210,7 @@ public class SinglyLinkedList<E> {
         ListItem<?> otherCurrentItem = other.head;
 
         while (currentItem != null && otherCurrentItem != null) {
-            if (!Objects.equals(currentItem.getData(), otherCurrentItem.getData())) {
+            if (!Objects.equals(currentItem, otherCurrentItem)) {
                 return false;
             }
 
@@ -204,12 +218,13 @@ public class SinglyLinkedList<E> {
             otherCurrentItem = otherCurrentItem.getNext();
         }
 
-        return currentItem == null && otherCurrentItem == null;
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = 1;
+
         for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext()) {
             result = 31 * result + Objects.hashCode(currentItem.getData());
         }
