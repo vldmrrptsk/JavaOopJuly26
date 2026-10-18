@@ -6,41 +6,43 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> myList = new ArrayList<>(5);
+        ArrayList<String> emptyListCheck = new ArrayList<>();
+        System.out.println(emptyListCheck);
 
-        myList.add(10);
-        myList.add(20);
-        myList.add(50);
-        myList.add(-50);
-        myList.add(-1000);
-        myList.add(100);
+        ArrayList<Integer> listCheck = new ArrayList<>(5);
 
-        System.out.println("Список: " + myList);
-        System.out.println("Длина списка: " + myList.size());
+        listCheck.add(10);
+        listCheck.add(20);
+        listCheck.add(50);
+        listCheck.add(-50);
+        listCheck.add(-1000);
+        listCheck.add(100);
 
-        myList.add(3, 20);
-        System.out.println("Список: " + myList);
-        System.out.println("Длина списка: " + myList.size());
+        System.out.println("Список: " + listCheck);
+        System.out.println("Длина списка: " + listCheck.size());
 
-        ArrayList<Integer> myList2 = new ArrayList<>(5);
+        listCheck.add(3, 20);
+        System.out.println("Список: " + listCheck);
+        System.out.println("Длина списка: " + listCheck.size());
 
-        myList2.add(67);
-        myList2.add(93);
-        myList2.add(121);
+        ArrayList<Integer> listCheck2 = new ArrayList<>(5);
 
-        System.out.println("Список: " + myList2);
-        System.out.println("Длина списка: " + myList2.size());
+        listCheck2.add(67);
+        listCheck2.add(93);
+        listCheck2.add(121);
 
-        myList.addAll(3, myList2);
+        System.out.println("Список: " + listCheck2);
+        System.out.println("Длина списка: " + listCheck2.size());
 
-        System.out.println("Список: " + myList);
-        System.out.println("Длина списка: " + myList.size());
-        System.out.println("Capacity: " + myList.len());
+        listCheck2.addAll(3, listCheck2);
 
-        System.out.println(myList.contains(34));
+        System.out.println("Список: " + listCheck2);
+        System.out.println("Длина списка: " + listCheck.size());
 
-        myList.removeAll(Arrays.asList(50, 100, -1000));
+        System.out.println(listCheck.contains(34));
 
-        System.out.println("Список: " + myList);
+        listCheck.removeAll(Arrays.asList(50, 100, -1000));
+
+        System.out.println("Список: " + listCheck);
     }
 }
